@@ -1,7 +1,7 @@
 
 #pragma once  // Prevent multiple inclusions of this header file
 
-#include "sensor.h"  // Base Sensor class for inheritance
+#include "../sensor.h" // Base Sensor class for inheritance
 #include <vector>    // STL vector container for dynamic arrays
 
 // TF-Luna LiDAR: Benewake ToF (Time of Flight) LiDAR sensor
@@ -10,7 +10,7 @@
 class Lidar : public Sensor {
   public:
     // Constructor: Initialize the TF-Luna I2C LiDAR sensor
-    TFLI2C();
+    Lidar();
     
 
     // Get complete sensor data (distance, signal strength, and temperature)
@@ -123,6 +123,9 @@ class Lidar : public Sensor {
     // Print the current status register value (for debugging)
     // Displays error codes and device state
     void printStatus();
+    
+    // Override the read() method from Sensor base class
+    std::vector<uint8_t> read() override;
 
   private:
     // Device status byte (0 = READY, non-zero = error code)

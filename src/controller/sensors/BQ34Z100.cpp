@@ -3,38 +3,59 @@
 #include <cinttypes>
 #include <vector>
 #include <cmath>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <linux/i2c-dev.h>
+#include <iostream>
+#include <cstring>
 
-// Constructor: set I2C frequency
-BQ34Z100::BQ34Z100(I2C& i2c, int hz)
-  : _i2c(i2c) {
-  _i2c.frequency(hz);
+// Constructor: open I2C device
+BQ34Z100::BQ34Z100(const char* i2c_device)
+  : _i2c_fd(-1), _status(0) {
+  _i2c_fd = open(i2c_device, O_RDWR);
+  if (_i2c_fd < 0) {
+    std::cerr << "Failed to open I2C device: " << i2c_device << std::endl;
+    _status = 255;
+  } else {
+    // Set I2C slave address
+    if (ioctl(_i2c_fd, I2C_SLAVE, GAUGE_ADDRESS) < 0) {
+      std::cerr << "Failed to set I2C slave address" << std::endl;
+      _status = 254;
+    }
+  }
 }
+
 
 
 
 // Low-level multi-byte register read helper
 uint32_t BQ34Z100::read(Command command, const uint8_t length) {
+  if (_i2c_fd < 0) {
+    std::cerr << "I2C device not open" << std::endl;
+    return 0;
+  }
+
   uint32_t val = 0;
   for (int i = 0; i < length; i++) {
-	uint8_t cmdByte = static_cast<uint8_t>(command) + i;
-	int writeResult = _i2c.write(
-		GAUGE_ADDRESS | 0x0,
-		reinterpret_cast<char*>(&cmdByte),
-		1);
-	if (writeResult != 0) {
-	  printf("I2C write error when setting register address\r\n");
-	}
+    uint8_t cmdByte = static_cast<uint8_t>(command) + i;
+    
+    // Write register address
+    if (write(_i2c_fd, &cmdByte, 1) != 1) {
+      std::cerr << "I2C write error when setting register address" << std::endl;
+      _status = 253;
+      return 0;
+    }
 
-	char readByte = 0;
-	int readResult = _i2c.read(
-		GAUGE_ADDRESS | 0x1,
-		&readByte,
-		1);
-	if (readResult != 0) {
-	  printf("I2C read error when reading data\r\n");
-	}
+    // Read one byte from the register
+    uint8_t readByte = 0;
+    if (::read(_i2c_fd, &readByte, 1) != 1) {
+      std::cerr << "I2C read error when reading data" << std::endl;
+      _status = 252;
+      return 0;
+    }
 
-	val |= (static_cast<uint32_t>(static_cast<uint8_t>(readByte)) << (8 * i));
+    val |= (static_cast<uint32_t>(readByte) << (8 * i));
   }
   return val;
 }

@@ -1,10 +1,11 @@
-#pragma once  // Prevent multiple inclusions of this header file
-#include "actuator.h"  // Base Actuator class for inheritance
-#include <vector>      // STL vector container for dynamic arrays
+#pragma once  
 
-class Propultion : public Actuator {
+#include "../controller/actuator.h"
+#include <vector>      
+
+class Propulsion : public Actuator {
 public:
-    Propultion();
+    Propulsion();
 
     void setThrust(std::vector<uint8_t> thrust);
     void engage();

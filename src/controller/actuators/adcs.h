@@ -1,13 +1,18 @@
-#pragma once  // Prevent multiple inclusions of this header file
+#pragma once  
 
-class ADCS : public actuator {
+#include "../controller/actuator.h"
+#include <vector>
+
+class ADCS : public Actuator {
 public:
-    ADCS();
+
+
+    virtual bool write(std::vector<uint8_t> bytes);
     
     void rotate(std::vector<uint8_t> axis, std::vector<float> angle);
     
 private:
-    // Private member variables for actuator state
+
    std::vector<uint8_t> current_axis;
    std::vector<float> current_angle;
 };
