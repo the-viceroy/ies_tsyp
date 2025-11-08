@@ -1,4 +1,4 @@
-#include "energy.h"
+#include "manager.h"
 
 void Manager::poll() {
 //todo: implement energy management

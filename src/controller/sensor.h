@@ -5,6 +5,6 @@
 #include "device.h"
 
 class Sensor: public Device {
-protected:
+public:
   virtual std::vector<uint8_t> read();
 };
