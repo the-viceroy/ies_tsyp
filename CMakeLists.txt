@@ -9,5 +9,8 @@ add_executable(
 	src/controller/sensors/lidar.cpp
 	src/controller/sensors/BQ34Z100.cpp
 	src/controller/actuator.cpp
-	src/energy/energy.cpp
-)
+	src/modules/module.cpp
+	src/modules/mppt.cpp
+	src/controller/sensors/ina219.cpp
+	src/energy/manager.cpp
+	)

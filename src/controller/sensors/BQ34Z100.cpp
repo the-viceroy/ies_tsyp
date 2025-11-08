@@ -26,6 +26,13 @@ BQ34Z100::BQ34Z100(const char* i2c_device)
   }
 }
 
+// Destructor: close I2C device
+BQ34Z100::~BQ34Z100() {
+  if (_i2c_fd >= 0) {
+    close(_i2c_fd);
+  }
+}
+
 
 
 
