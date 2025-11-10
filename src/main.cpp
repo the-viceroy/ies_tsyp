@@ -1,12 +1,13 @@
 #include "controller/controller.h"
-#include "energy/energy.h"
-#include "modules/module.h"
+#include "manager/manager.h"
+#include "modules/modules.h"
+
 int main(int argc, char *argv[]) {
   Controller controller;
-  Manager energy(controller, std::vector<Module>());
+  Manager manager(controller, std::vector<Module>());
 
   while (true) {
-    energy.poll();
+    manager.poll();
   }
   return 0;
 }

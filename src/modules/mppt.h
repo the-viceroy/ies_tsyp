@@ -1,7 +1,7 @@
 #ifndef MPPT_H
 #define MPPT_H
 
-#include "module.h"
+#include "modules.h"
 
 /**
  * Maximum Power Point Tracking (MPPT) Module

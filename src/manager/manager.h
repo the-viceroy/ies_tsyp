@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../controller/controller.h"
-#include "../modules/module.h"
+#include "../modules/modules.h"
 #include <functional>
 #include <vector>
 

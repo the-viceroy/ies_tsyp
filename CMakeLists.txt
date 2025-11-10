@@ -12,5 +12,5 @@ add_executable(
 	src/modules/module.cpp
 	src/modules/mppt.cpp
 	src/controller/sensors/ina219.cpp
-	src/energy/manager.cpp
+	src/manager/manager.cpp
 	)
